@@ -1,5 +1,8 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 
 const http = require('http');
 
@@ -27,21 +30,25 @@ var customerSchema = new mongoose.Schema({
   }
 });
 
+customerSchema.statics.findByUserName = function(username,cb) {
+  return this.find({userName: username},cb);
+}
+
 var Customer = mongoose.model('customer', customerSchema);
 
-http.createServer((request, response) => {
-  request.on('error', (err) => {
-    console.error(err);
-    response.statusCode = 400;
-    response.end();
+
+
+app.post('/', function (req, res) {
+  var userNameToSearch = req.body.username;
+  Customer.findByUserName(userNameToSearch,function(err, data) {
+    if(err) {
+      console.log(err);
+    }
+    console.log(data);
+    res.send(data);
   });
-  response.on('error', (err) => {
-    console.error(err);
-  });
-  if (request.method === 'POST' && request.url === '/echo') {
-    request.pipe(response);
-  } else {
-    response.statusCode = 404;
-    response.end();
-  }
-}).listen(27017);
+});
+
+app.listen(8000, function() {
+  console.log("Listening on 27017!");
+});

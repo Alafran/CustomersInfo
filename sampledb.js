@@ -1,17 +1,24 @@
 var mongo = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/customerdb";
+var db = require('./config/db');
 
-mongo.connect(url, function(err, db) {
+mongo.connect(db.url, function(err, database) {
   if(err) {
     console.log(err);
   }
-  var collection = db.collection('customers');
+  var collection = database.db('customersinfosample').collection('customers');
 
-  collection.find({username:"billyjean"}, function(err,doc) {
-    if(err) {
-      console.log(err);
+  collection.insert({
+    userName: "billyjean",
+    firstName: "billy",
+    lastName: "jean",
+    gender: "male",
+    eyeColor: "brown",
+    address: {
+      street: "100 N Colonial Ave",
+      city: "Richmond",
+      state: "VA",
+      zip: 23221
     }
-    console.log(doc);
   });
   db.close();
 });

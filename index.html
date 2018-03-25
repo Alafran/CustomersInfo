@@ -2,16 +2,16 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <title>Find a customer!</title>
   </head>
   <body>
     <div id = "enterName">
     <h1>Enter a customers username: </h1>
-    <form class="" action="localhost://27017" method="post">
-      Username: <input type="text" name = "username" value="">
-      <br>
-      <input type="submit" value="Get info">
+    <form>
+      Username: <input type="text" name="textInput" value = "">
     </form>
+    <button type="submit" name="button">Get Info</button>
     </div>
     <div id = "customersInfo">
 
@@ -35,5 +35,22 @@
       <p id = "address"></p>
       <br>
     </div>
+    <script>
+    $("button").click(function(){
+  $.ajax({
+    url: "http://www.localhost:8080",
+    type: "get",
+    data {
+      username: "billyjean"
+    },
+    success: function(response) {
+      $("#firstName").text(response.firstName);
+    },
+    error: function(err) {
+      console.log(err);
+    }
+  });
+});
+    </script>
   </body>
 </html>
